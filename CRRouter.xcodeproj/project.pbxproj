@@ -13,6 +13,7 @@
 		CE599F591EB1F09E00216EFA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE599F571EB1F09E00216EFA /* Main.storyboard */; };
 		CE599F5B1EB1F09E00216EFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE599F5A1EB1F09E00216EFA /* Assets.xcassets */; };
 		CE599F5E1EB1F09E00216EFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE599F5C1EB1F09E00216EFA /* LaunchScreen.storyboard */; };
+		CE599F681EB1F0DA00216EFA /* CRRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE599F671EB1F0DA00216EFA /* CRRouter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		CE599F5A1EB1F09E00216EFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE599F5D1EB1F09E00216EFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE599F5F1EB1F09E00216EFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE599F661EB1F0DA00216EFA /* CRRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouter.h; sourceTree = "<group>"; };
+		CE599F671EB1F0DA00216EFA /* CRRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 		CE599F4D1EB1F09E00216EFA /* CRRouter */ = {
 			isa = PBXGroup;
 			children = (
+				CE599F651EB1F0B700216EFA /* CRRouter */,
 				CE599F511EB1F09E00216EFA /* AppDelegate.h */,
 				CE599F521EB1F09E00216EFA /* AppDelegate.m */,
 				CE599F541EB1F09E00216EFA /* ViewController.h */,
@@ -77,6 +81,15 @@
 				CE599F4F1EB1F09E00216EFA /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CE599F651EB1F0B700216EFA /* CRRouter */ = {
+			isa = PBXGroup;
+			children = (
+				CE599F661EB1F0DA00216EFA /* CRRouter.h */,
+				CE599F671EB1F0DA00216EFA /* CRRouter.m */,
+			);
+			path = CRRouter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,6 +166,7 @@
 				CE599F561EB1F09E00216EFA /* ViewController.m in Sources */,
 				CE599F531EB1F09E00216EFA /* AppDelegate.m in Sources */,
 				CE599F501EB1F09E00216EFA /* main.m in Sources */,
+				CE599F681EB1F0DA00216EFA /* CRRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +321,7 @@
 				CE599F641EB1F09E00216EFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
