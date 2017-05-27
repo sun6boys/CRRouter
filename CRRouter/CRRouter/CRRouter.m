@@ -92,8 +92,6 @@
     }
     
     self.routesStorage[URL.scheme][URL.host][URL.path] = routeNode;
-    
-    NSLog(@"%@",self.routesStorage);
     return routeNode;
 }
 
