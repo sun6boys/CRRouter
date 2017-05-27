@@ -27,13 +27,17 @@
 - (void)test1
 {
     [[[CRRouter registURLPattern:@"bl://home/homePage"] paramsMap:^NSDictionary *(NSDictionary *originParams) {
+        
         NSString *p1 = originParams[@"p1"];
         NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
         params[@"pageId"] = p1;
         return params;
+        
     }]objectHandler:^id(NSDictionary *routeParams) {
+        
         NSLog(@"routeParams : %@",routeParams);
         return @"测试成功";
+        
     }];
     
     
@@ -45,16 +49,22 @@
 - (void)test2
 {
     [[[[CRRouter registURLPattern:@"bl://home/homePage"] paramsValidate:^BOOL(NSDictionary *originParams) {
+        
         NSString *p1 = originParams[@"p1"];
         return p1.length > 0;
+        
     }] paramsMap:^NSDictionary *(NSDictionary *originParams) {
+        
         NSString *p1 = originParams[@"p1"];
         NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
         params[@"pageId"] = p1;
         return params;
+        
     }] objectHandler:^id(NSDictionary *routeParams) {
+        
         NSLog(@"routeParams : %@",routeParams);
         return @"测试成功";
+        
     }];
     
     NSString *result = [CRRouter objectForURL:@"bl://home/homePage?p3=234&p1=asas"];
