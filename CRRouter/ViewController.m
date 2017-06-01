@@ -19,8 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self test1];
-    [self test3];
+    [self test1];
+//    [self test3];
     
 }
 
@@ -40,15 +40,13 @@
         
     }];
     
-    
     NSString *result = [CRRouter objectForURL:@"bl://home/homePage?p1=234&p2=asas"];
     NSLog(@"result = %@",result);
 }
 
-
 - (void)test2
 {
-    [[[[CRRouter registURLPattern:@"bl://home/homePage"] paramsValidate:^BOOL(NSDictionary *originParams) {
+    [[[[CRRouter registURLPattern:@"bl://home/homePage"] paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
         
         NSString *p1 = originParams[@"p1"];
         return p1.length > 0;
@@ -85,6 +83,11 @@
     [CRRouter registURLPattern:@"bl1://ab/homePage"];
     [CRRouter registURLPattern:@"bl://asasas/homePage"];
     [CRRouter registURLPattern:@"bl://asasas/homePage"];
+    
+    //举例 bl://goods/goodsDetail
+    // 上面是对应商品详情页的路由（商品详情页面需要一个参数 goodsId）
+    // 例子1 ： bl://goods/goodsDetail?p1=23232  通过这个url获取到商品详情页的控制器，如果你写了validate 显示参数p1 不是goodsId 不能让你通过
+    // 但是上面这个url有可能是给到第三方调用的，此时我们不想给我们页面需要用到真正参数名 所以让第三方用p1代码，那这个时候paramsMap的block就起作用了，他可以把第三方给过来的参数mapping成我模块真正需要的参数
 }
 
 @end

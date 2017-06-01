@@ -12,6 +12,7 @@
 @interface CRRouter : NSObject
 
 + (CRRouteNode *)registURLPattern:(NSString *)URLPattern;
++ (void)registRouteNode:(CRRouteNode *)routeNode;
 
 + (void)deregistRouteForURL:(NSString *)URLPattern;
 + (void)deregistRouteForRouteNode:(CRRouteNode *)routeNode;
@@ -19,12 +20,15 @@
 + (BOOL)hasRegistURL:(NSString *)URLPattern;
 
 + (id)objectForURL:(NSString *)URLPattern;
++ (id)objectForURL:(NSString *)URLPattern withParams:(NSDictionary *)params;
++ (id)objectForRouteNode:(CRRouteNode *)routeNode withParams:(NSDictionary *)params;
 
++ (void)setEnablePrintfLog:(BOOL)enablePrintfLog;
 @end
 
 
 
-typedef BOOL (^CRRouteParamsValidator)(NSDictionary *originParams);
+typedef BOOL (^CRRouteParamsValidator)(NSDictionary *originParams,NSDictionary *routeParams);
 typedef NSDictionary *(^CRRouteParamsMapper)(NSDictionary *originParams);
 typedef id (^CRRouteObjectHandler)(NSDictionary *routeParams);
 
@@ -33,6 +37,8 @@ typedef id (^CRRouteObjectHandler)(NSDictionary *routeParams);
 @property (nonatomic, copy, readonly) NSString *scheme;
 @property (nonatomic, copy, readonly) NSString *host;
 @property (nonatomic, copy, readonly) NSString *path;
+
++ (instancetype)routeNodeWithURLScheme:(NSString *)scheme URLHost:(NSString *)host URLPath:(NSString *)path;
 
 /**
  配置相关方法
