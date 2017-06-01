@@ -23,14 +23,17 @@
 + (id)objectForURL:(NSString *)URLPattern withParams:(NSDictionary *)params;
 + (id)objectForRouteNode:(CRRouteNode *)routeNode withParams:(NSDictionary *)params;
 
++ (BOOL)openURL:(NSString *)URLPattern;
++ (BOOL)openURL:(NSString *)URLPattern withParams:(NSDictionary *)params;
+
 + (void)setEnablePrintfLog:(BOOL)enablePrintfLog;
 @end
-
 
 
 typedef BOOL (^CRRouteParamsValidator)(NSDictionary *originParams,NSDictionary *routeParams);
 typedef NSDictionary *(^CRRouteParamsMapper)(NSDictionary *originParams);
 typedef id (^CRRouteObjectHandler)(NSDictionary *routeParams);
+typedef void (^CRRouteOpenHandler)(NSDictionary *routeParams);
 
 @interface CRRouteNode : NSObject
 
@@ -45,6 +48,7 @@ typedef id (^CRRouteObjectHandler)(NSDictionary *routeParams);
  */
 - (instancetype)paramsValidate:(CRRouteParamsValidator)paramsValidator;
 - (instancetype)paramsMap:(CRRouteParamsMapper)paramsMapper;
-- (void)objectHandler:(CRRouteObjectHandler)objectHandler;
+- (instancetype)objectHandler:(CRRouteObjectHandler)objectHandler;
+- (instancetype)openHandler:(CRRouteOpenHandler)openHandler;
 
 @end

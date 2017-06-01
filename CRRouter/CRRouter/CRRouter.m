@@ -13,6 +13,7 @@
 - (BOOL)validateWithOriginParams:(NSDictionary *)params routeParams:(NSDictionary *)routeParams;
 - (NSDictionary *)mapParams:(NSDictionary *)params;
 - (id)objectForRouteParams:(NSDictionary *)routeParams;
+- (BOOL)openPageWithRouteParams:(NSDictionary *)routeParams;
 @end
 
 static BOOL enableLog = NO;
@@ -76,12 +77,7 @@ static BOOL enableLog = NO;
 + (id)objectForURL:(NSString *)URLPattern withParams:(NSDictionary *)params
 {
     NSURL *URL = [NSURL URLWithString:URLPattern];
-    NSDictionary *queryParams = [self queryDictonaryWithURL:URL];
-    [self routerLogWithFormat:@"URL.queryItems are %@",queryParams];
-    
-    NSMutableDictionary *originParams = [[NSMutableDictionary alloc] initWithDictionary:queryParams];
-    [originParams addEntriesFromDictionary:params];
-    [self routerLogWithFormat:@"Params Contains URL.query parameters and custom parameters are  %@",queryParams];
+    NSDictionary *originParams = [self paramsForURL:URL withCustomParams:params];
     
     CRRouteNode *node = [[self sharedInstance] routeNodeForURL:URL];
     
@@ -97,14 +93,39 @@ static BOOL enableLog = NO;
 {
     [self routerLogWithFormat:@"params before mapping are %@",params];
     NSDictionary *routeParams = [routeNode mapParams:params];
-    [self routerLogWithFormat:@"params after mapping are %@",params];
+    [self routerLogWithFormat:@"params after mapping are %@",routeParams];
     
     if([routeNode validateWithOriginParams:params routeParams:routeParams] == NO){
-        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@  !!!!!!!!!!",routeNode.scheme,routeNode.host,routeNode.path];
+        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@ has registed  !!!!!!!!!!",routeNode.scheme,routeNode.host,routeNode.path];
         return nil;
     }
     
     return [routeNode objectForRouteParams:routeParams];
+}
+
++ (BOOL)openURL:(NSString *)URLPattern
+{
+    return [self openURL:URLPattern withParams:nil];
+}
+
++ (BOOL)openURL:(NSString *)URLPattern withParams:(NSDictionary *)params
+{
+    NSURL *URL = [NSURL URLWithString:URLPattern];
+    CRRouteNode *node = [[self sharedInstance] routeNodeForURL:URL];
+    if(node == nil){
+        [self routerLogWithFormat:@"!!!!!!!!!!  Not found router for scheme: %@  host : %@  path :%@ has registed  !!!!!!!!!!",URL.scheme,URL.host,URL.path];
+        return NO;
+    }
+    NSDictionary *mergeParams = [self paramsForURL:URL withCustomParams:params];
+    [self routerLogWithFormat:@"params before mapping are %@",mergeParams];
+    NSDictionary *routeParams = [node mapParams:mergeParams];
+    [self routerLogWithFormat:@"params after mapping are %@",routeParams];
+    
+    if([node validateWithOriginParams:params routeParams:routeParams] == NO){
+        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@ has registed  !!!!!!!!!!",node.scheme,node.host,node.path];
+        return NO;
+    }
+    return [node openPageWithRouteParams:routeParams];
 }
 
 + (void)setEnablePrintfLog:(BOOL)enablePrintfLog
@@ -112,7 +133,20 @@ static BOOL enableLog = NO;
     enableLog = enablePrintfLog;
 }
 
-#pragma mark - instance method
+#pragma mark - private methods
+#pragma mark - class methods
++ (NSDictionary *)paramsForURL:(NSURL *)URL withCustomParams:(NSDictionary *)customParams
+{
+    NSDictionary *queryParams = [self queryDictonaryWithURL:URL];
+    [self routerLogWithFormat:@"URL.queryItems are %@",queryParams];
+    
+    NSMutableDictionary *originParams = [[NSMutableDictionary alloc] initWithDictionary:queryParams];
+    [originParams addEntriesFromDictionary:customParams];
+    return [originParams copy];
+}
+
+#pragma mark - private methods
+#pragma mark - instance methods
 - (CRRouteNode *)addURLPatternForURL:(NSURL *)URL
 {
     CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:URL.scheme URLHost:URL.host URLPath:URL.path];
@@ -202,7 +236,8 @@ static BOOL enableLog = NO;
 
 @property (nonatomic, copy) CRRouteParamsValidator validator;
 @property (nonatomic, copy) CRRouteParamsMapper mapper;
-@property (nonatomic, copy) CRRouteObjectHandler handler;
+@property (nonatomic, copy) CRRouteObjectHandler objectHandler;
+@property (nonatomic, copy) CRRouteOpenHandler openHandler;
 
 @property (nonatomic, copy, readwrite) NSString *scheme;
 @property (nonatomic, copy, readwrite) NSString *host;
@@ -239,9 +274,16 @@ static BOOL enableLog = NO;
     return self;
 }
 
-- (void)objectHandler:(CRRouteObjectHandler)objectHandler
+- (instancetype)objectHandler:(CRRouteObjectHandler)objectHandler
 {
-    _handler = objectHandler;
+    _objectHandler = objectHandler;
+    return self;
+}
+
+- (instancetype)openHandler:(CRRouteOpenHandler)openHandler
+{
+    _openHandler = openHandler;
+    return self;
 }
 
 #pragma mark - private methods
@@ -257,7 +299,16 @@ static BOOL enableLog = NO;
 
 - (id)objectForRouteParams:(NSDictionary *)routeParams
 {
-    return self.handler ? self.handler(routeParams) : nil;
+    return self.objectHandler ? self.objectHandler(routeParams) : nil;
+}
+
+- (BOOL)openPageWithRouteParams:(NSDictionary *)routeParams
+{
+    if(self.openHandler == nil)
+        return NO;
+    
+    self.openHandler(routeParams);
+    return YES;
 }
 
 @end
