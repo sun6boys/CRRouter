@@ -43,6 +43,9 @@ typedef void (^CRRouteOpenHandler)(NSDictionary *routeParams);
 
 + (instancetype)routeNodeWithURLScheme:(NSString *)scheme URLHost:(NSString *)host URLPath:(NSString *)path;
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 /**
  配置相关方法
  */
