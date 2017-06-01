@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
-
 #import "CRRouter.h"
+
+#import "CRGoodsViewController.h"
+#import "CRGoodsListViewController.h"
 
 @interface ViewController ()
 
@@ -19,75 +21,85 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self test1];
-//    [self test3];
-    
+    [CRRouter setEnablePrintfLog:YES];
+    //regist
+    [self registRouteNode];
+    [self registURL];
+        
 }
 
-- (void)test1
+- (void)registRouteNode
 {
-    [[[CRRouter registURLPattern:@"bl://home/homePage"] paramsMap:^NSDictionary *(NSDictionary *originParams) {
-        
-        NSString *p1 = originParams[@"p1"];
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-        params[@"pageId"] = p1;
-        return params;
-        
-    }]objectHandler:^id(NSDictionary *routeParams) {
-        
-        NSLog(@"routeParams : %@",routeParams);
-        return @"测试成功";
-        
+    CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"bl" URLHost:@"goods" URLPath:@"/goodsDetail"];
+    [routeNode paramsMap:^NSDictionary *(NSDictionary *originParams) {
+        NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
+        temp[@"goodsId"] = originParams[@"p1"];
+        [temp addEntriesFromDictionary:originParams];
+        return temp;
+    }];
+    [routeNode paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
+        NSString *goodsId = routeParams[@"goodsId"];
+        return goodsId.length > 0;
     }];
     
-    NSString *result = [CRRouter objectForURL:@"bl://home/homePage?p1=234&p2=asas"];
-    NSLog(@"result = %@",result);
+    [routeNode objectHandler:^id(NSDictionary *routeParams) {
+        CRGoodsViewController *goodsVC = [[CRGoodsViewController alloc] init];
+        goodsVC.goodsId = routeParams[@"goodsId"];
+        return goodsVC;
+    }];
+    
+    [routeNode openHandler:^(NSDictionary *routeParams) {
+        CRGoodsViewController *goodsVC = [[CRGoodsViewController alloc] init];
+        goodsVC.goodsId = routeParams[@"goodsId"];
+        UINavigationController *navigationVC = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        [navigationVC pushViewController:goodsVC animated:YES];
+    }];
+    
+    [CRRouter registRouteNode:routeNode];
 }
 
-- (void)test2
+- (void)registURL
 {
-    [[[[CRRouter registURLPattern:@"bl://home/homePage"] paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
+    [[[CRRouter registURLPattern:@"bl://goods/goodsList"] paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
         
-        NSString *p1 = originParams[@"p1"];
-        return p1.length > 0;
-        
-    }] paramsMap:^NSDictionary *(NSDictionary *originParams) {
-        
-        NSString *p1 = originParams[@"p1"];
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-        params[@"pageId"] = p1;
-        return params;
+        return routeParams[@"categoryId"] != nil;
         
     }] objectHandler:^id(NSDictionary *routeParams) {
         
-        NSLog(@"routeParams : %@",routeParams);
-        return @"测试成功";
+        CRGoodsListViewController *listVC = [[CRGoodsListViewController alloc] init];
+        listVC.categoryId = routeParams[@"categoryId"];
+        return listVC;
         
     }];
-    
-    NSString *result = [CRRouter objectForURL:@"bl://home/homePage?p3=234&p1=asas"];
-    NSLog(@"result = %@",result);
 }
 
 
-- (void)test3
+#pragma mark - action
+- (IBAction)test1:(id)sender
 {
-    [CRRouter registURLPattern:@"bl://home/homePage"];
-    [CRRouter registURLPattern:@"bl://home/homePage"];
-    [CRRouter registURLPattern:@"bl://home/homePage"];
-    [CRRouter registURLPattern:@"bl://home/homePage"];
-    [CRRouter registURLPattern:@"bl://home/homePage1"];
-    [CRRouter registURLPattern:@"bl://home/homePage2"];
-    [CRRouter registURLPattern:@"bl://home/homePage3"];
-    [CRRouter registURLPattern:@"bl1://bs/homePage"];
-    [CRRouter registURLPattern:@"bl1://ab/homePage"];
-    [CRRouter registURLPattern:@"bl://asasas/homePage"];
-    [CRRouter registURLPattern:@"bl://asasas/homePage"];
+//    UIViewController *vc = [CRRouter objectForURL:@"bl://goods/goodsDetail?p1=1"];
+//    if(vc){
+//        [self.navigationController pushViewController:vc animated:YES];
+//    }
     
-    //举例 bl://goods/goodsDetail
-    // 上面是对应商品详情页的路由（商品详情页面需要一个参数 goodsId）
-    // 例子1 ： bl://goods/goodsDetail?p1=23232  通过这个url获取到商品详情页的控制器，如果你写了validate 显示参数p1 不是goodsId 不能让你通过
-    // 但是上面这个url有可能是给到第三方调用的，此时我们不想给我们页面需要用到真正参数名 所以让第三方用p1代码，那这个时候paramsMap的block就起作用了，他可以把第三方给过来的参数mapping成我模块真正需要的参数
+    [CRRouter openURL:@"bl://goods/goodsDetail?p1=1"];
 }
+
+- (IBAction)test2:(id)sender
+{
+    UIViewController *vc = [CRRouter objectForURL:@"bl://goods/goodsList?categoryId=1"];
+    if(vc){
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+- (IBAction)test3:(id)sender
+{
+    UIViewController *vc = [CRRouter objectForURL:@"bl://goods/goodsList" withParams:@{@"categoryId" : @"1"}];
+    if(vc){
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
 
 @end

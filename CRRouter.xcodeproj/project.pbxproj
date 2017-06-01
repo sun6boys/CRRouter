@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0011CC1EDFF9FB002B44C0 /* CRGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0011CB1EDFF9FB002B44C0 /* CRGoodsViewController.m */; };
+		CE0011CF1EE003B7002B44C0 /* CRGoodsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0011CE1EE003B7002B44C0 /* CRGoodsListViewController.m */; };
 		CE599F501EB1F09E00216EFA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE599F4F1EB1F09E00216EFA /* main.m */; };
 		CE599F531EB1F09E00216EFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE599F521EB1F09E00216EFA /* AppDelegate.m */; };
 		CE599F561EB1F09E00216EFA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE599F551EB1F09E00216EFA /* ViewController.m */; };
@@ -17,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE0011CA1EDFF9FB002B44C0 /* CRGoodsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRGoodsViewController.h; sourceTree = "<group>"; };
+		CE0011CB1EDFF9FB002B44C0 /* CRGoodsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRGoodsViewController.m; sourceTree = "<group>"; };
+		CE0011CD1EE003B7002B44C0 /* CRGoodsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRGoodsListViewController.h; sourceTree = "<group>"; };
+		CE0011CE1EE003B7002B44C0 /* CRGoodsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRGoodsListViewController.m; sourceTree = "<group>"; };
 		CE599F4B1EB1F09E00216EFA /* CRRouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CRRouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE599F4F1EB1F09E00216EFA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE599F511EB1F09E00216EFA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -42,6 +48,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE0011C91EDFF9DA002B44C0 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				CE0011CA1EDFF9FB002B44C0 /* CRGoodsViewController.h */,
+				CE0011CB1EDFF9FB002B44C0 /* CRGoodsViewController.m */,
+				CE0011CD1EE003B7002B44C0 /* CRGoodsListViewController.h */,
+				CE0011CE1EE003B7002B44C0 /* CRGoodsListViewController.m */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
 		CE599F421EB1F09E00216EFA = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				CE599F651EB1F0B700216EFA /* CRRouter */,
+				CE0011C91EDFF9DA002B44C0 /* Demo */,
 				CE599F511EB1F09E00216EFA /* AppDelegate.h */,
 				CE599F521EB1F09E00216EFA /* AppDelegate.m */,
 				CE599F541EB1F09E00216EFA /* ViewController.h */,
@@ -163,6 +181,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0011CF1EE003B7002B44C0 /* CRGoodsListViewController.m in Sources */,
+				CE0011CC1EDFF9FB002B44C0 /* CRGoodsViewController.m in Sources */,
 				CE599F561EB1F09E00216EFA /* ViewController.m in Sources */,
 				CE599F531EB1F09E00216EFA /* AppDelegate.m in Sources */,
 				CE599F501EB1F09E00216EFA /* main.m in Sources */,
