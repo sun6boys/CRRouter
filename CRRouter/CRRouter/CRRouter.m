@@ -82,7 +82,7 @@ static BOOL enableLog = NO;
     CRRouteNode *node = [[self sharedInstance] routeNodeForURL:URL];
     
     if(node == nil){
-        [self routerLogWithFormat:@"!!!!!!!!!!  Not found router for scheme: %@  host : %@  path :%@  !!!!!!!!!!",URL.scheme,URL.host,URL.path];
+        [self routerLogWithFormat:@"!!!!!!!!!!  Not found router for scheme: %@  host : %@  path :%@ has registed  !!!!!!!!!!",URL.scheme,URL.host,URL.path];
         return nil;
     }
     [self routerLogWithFormat:@"Successfully  find a router for scheme: %@  host : %@  path :%@",URL.scheme,URL.host,URL.path];
@@ -96,7 +96,7 @@ static BOOL enableLog = NO;
     [self routerLogWithFormat:@"params after mapping are %@",routeParams];
     
     if([routeNode validateWithOriginParams:params routeParams:routeParams] == NO){
-        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@ has registed  !!!!!!!!!!",routeNode.scheme,routeNode.host,routeNode.path];
+        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@  !!!!!!!!!!",routeNode.scheme,routeNode.host,routeNode.path];
         return nil;
     }
     
@@ -122,10 +122,21 @@ static BOOL enableLog = NO;
     [self routerLogWithFormat:@"params after mapping are %@",routeParams];
     
     if([node validateWithOriginParams:params routeParams:routeParams] == NO){
-        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@ has registed  !!!!!!!!!!",node.scheme,node.host,node.path];
+        [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@  !!!!!!!!!!",node.scheme,node.host,node.path];
         return NO;
     }
     return [node openPageWithRouteParams:routeParams];
+}
+
++ (BOOL)openRouteNode:(CRRouteNode *)routeNode withParams:(NSDictionary *)params
+{
+    if(routeNode.scheme.length == 0 ||
+       routeNode.host.length == 0 ||
+       routeNode.path.length == 0)
+        return NO;
+    
+    NSString *URLPattern = [NSString stringWithFormat:@"%@://%@%@",routeNode.scheme,routeNode.host,routeNode.path];
+    return [self openURL:URLPattern withParams:params];
 }
 
 + (void)setEnablePrintfLog:(BOOL)enablePrintfLog
