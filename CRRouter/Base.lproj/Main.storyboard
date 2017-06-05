@@ -40,25 +40,17 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bcu-Kc-2sD">
                                 <rect key="frame" x="33" y="107" width="267" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button1"/>
+                                <state key="normal" title="openRouteDeomo1"/>
                                 <connections>
-                                    <action selector="test1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tr1-TM-4dP"/>
+                                    <action selector="openRouteDeomo1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Lx-pU-toP"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGg-W6-AyK">
                                 <rect key="frame" x="41" y="175" width="267" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button2"/>
+                                <state key="normal" title="openRouteDeomo2"/>
                                 <connections>
-                                    <action selector="test2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kUG-Se-GUw"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZeL-Ia-49g">
-                                <rect key="frame" x="41" y="241" width="267" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button3"/>
-                                <connections>
-                                    <action selector="test3:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xko-8d-EYY"/>
+                                    <action selector="openRouteDemo2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Bv-PX-woG"/>
                                 </connections>
                             </button>
                         </subviews>

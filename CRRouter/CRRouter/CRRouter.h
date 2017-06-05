@@ -25,7 +25,7 @@
 + (void)deregistRouteForURL:(NSString *)URLPattern;
 + (void)deregistRouteForRouteNode:(CRRouteNode *)routeNode;
 
-//Return is the route registered?
+//Returns whether the route has been registered?
 + (BOOL)hasRegistURL:(NSString *)URLPattern;
 
 //Call a route and return object if the route has registed and implement 'objectHandler'.

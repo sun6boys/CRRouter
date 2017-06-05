@@ -22,21 +22,26 @@
     [super viewDidLoad];
     
     [CRRouter setEnablePrintfLog:YES];
+    
     //regist
-    [self registRouteNode];
-    [self registURL];
+    [self registGoodsDetailRoute];
+    [self registGoodsListPageRoute];
         
 }
 
-- (void)registRouteNode
+- (void)registGoodsDetailRoute
 {
-    CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"bl" URLHost:@"goods" URLPath:@"/goodsDetail"];
+    
+    //There are two ways to register Route, and you can choose just one of them
+    //The first registration way
+    CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
     [routeNode paramsMap:^NSDictionary *(NSDictionary *originParams) {
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
         temp[@"goodsId"] = originParams[@"p1"];
         [temp addEntriesFromDictionary:originParams];
         return temp;
     }];
+    
     [routeNode paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
         NSString *goodsId = routeParams[@"goodsId"];
         return goodsId.length > 0;
@@ -56,11 +61,50 @@
     }];
     
     [CRRouter registRouteNode:routeNode];
+    
+    
+    //The second registration way
+    [[[[[CRRouter registURLPattern:@"cr://goods/goodsDetail"] paramsMap:^NSDictionary *(NSDictionary *originParams) {
+        
+        NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
+        temp[@"goodsId"] = originParams[@"p1"];
+        [temp addEntriesFromDictionary:originParams];
+        return temp;
+        
+    }] paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
+        
+        NSString *goodsId = routeParams[@"goodsId"];
+        return goodsId.length > 0;
+        
+    }] objectHandler:^id(NSDictionary *routeParams) {
+        
+        CRGoodsViewController *goodsVC = [[CRGoodsViewController alloc] init];
+        goodsVC.goodsId = routeParams[@"goodsId"];
+        return goodsVC;
+        
+    }] openHandler:^(NSDictionary *routeParams) {
+        
+        CRGoodsViewController *goodsVC = [[CRGoodsViewController alloc] init];
+        goodsVC.goodsId = routeParams[@"goodsId"];
+        UINavigationController *navigationVC = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        [navigationVC pushViewController:goodsVC animated:YES];
+        
+    }];
+    
+    
+    //If you don't need validation params and mapping params，you can do it like this
+    
+//    [[CRRouter registURLPattern:@"cr://goods/goodsDetail"] objectHandler:^id(NSDictionary *routeParams) {
+//        CRGoodsViewController *goodsVC = [[CRGoodsViewController alloc] init];
+//        goodsVC.goodsId = routeParams[@"goodsId"];
+//        return goodsVC;
+//    }];
+    
 }
 
-- (void)registURL
+- (void)registGoodsListPageRoute
 {
-    [[[CRRouter registURLPattern:@"bl://goods/goodsList"] paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
+    [[[CRRouter registURLPattern:@"cr://goods/goodsList"] paramsValidate:^BOOL(NSDictionary *originParams, NSDictionary *routeParams) {
         
         return routeParams[@"categoryId"] != nil;
         
@@ -73,33 +117,29 @@
     }];
 }
 
-
-#pragma mark - action
-- (IBAction)test1:(id)sender
+#pragma mark - event
+- (IBAction)openRouteDeomo1:(id)sender
 {
-//    UIViewController *vc = [CRRouter objectForURL:@"bl://goods/goodsDetail?p1=1"];
-//    if(vc){
-//        [self.navigationController pushViewController:vc animated:YES];
-//    }
+    UIViewController *vc = nil;
+    vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?p1=1"]; //Verify by parameters after mapping
+//    vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?goodsId=1"]; //Verify by parameters
+//    vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?asa=25"];  //Cannot verify by parameter
+//    vc = [CRRouter objectForURL:@"cr://goods/goodsDetail" withParams:@{@"goodsId" : @"1"}]; //Verify by parameters
     
-    [CRRouter openURL:@"bl://goods/goodsDetail?p1=1"];
+    if(vc){
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    //or
+//    [CRRouter openURL:@"cr://goods/goodsDetail?p1=1"];
 }
 
-- (IBAction)test2:(id)sender
+- (IBAction)openRouteDemo2:(id)sender
 {
-    UIViewController *vc = [CRRouter objectForURL:@"bl://goods/goodsList?categoryId=1"];
+    UIViewController *vc = [CRRouter objectForURL:@"cr://goods/goodsList" withParams:@{@"categoryId" : @"1"}];
     if(vc){
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
-
-- (IBAction)test3:(id)sender
-{
-    UIViewController *vc = [CRRouter objectForURL:@"bl://goods/goodsList" withParams:@{@"categoryId" : @"1"}];
-    if(vc){
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-}
-
 
 @end
