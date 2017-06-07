@@ -19,9 +19,10 @@
 static BOOL enableLog = NO;
 
 @interface CRRouter()
-
+{
+    dispatch_semaphore_t _lock;
+}
 @property (nonatomic, strong) NSMutableDictionary *routesStorage;
-@property (nonatomic, strong) dispatch_semaphore_t lock;
 @end
 
 @implementation CRRouter
@@ -177,7 +178,7 @@ static BOOL enableLog = NO;
 
 - (void)addRouteNode:(CRRouteNode *)routeNode
 {
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     if(self.routesStorage[routeNode.scheme] == nil){
         self.routesStorage[routeNode.scheme] = [[NSMutableDictionary alloc] init];
     }
@@ -185,21 +186,21 @@ static BOOL enableLog = NO;
         self.routesStorage[routeNode.scheme][routeNode.host] = [[NSMutableDictionary alloc] init];
     }
     self.routesStorage[routeNode.scheme][routeNode.host][routeNode.path] = routeNode;
-    dispatch_semaphore_signal(self.lock);
+    dispatch_semaphore_signal(_lock);
 }
 
 - (CRRouteNode *)routeNodeForURL:(NSURL *)URL
 {
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     CRRouteNode * routeNode = self.routesStorage[URL.scheme][URL.host][URL.path];
-    dispatch_semaphore_signal(self.lock);
+    dispatch_semaphore_signal(_lock);
     
     return routeNode;
 }
 
 - (void)removeRouteNode:(CRRouteNode *)routeNode
 {
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     
     NSMutableDictionary *schemeRoutes = self.routesStorage[routeNode.scheme];
     NSMutableDictionary *hostRoutes = schemeRoutes[routeNode.host];
@@ -208,7 +209,7 @@ static BOOL enableLog = NO;
     if(hostRoutes.count == 0)  [schemeRoutes removeObjectForKey:routeNode.host];
     if(schemeRoutes.count == 0)  [self.routesStorage removeObjectForKey:routeNode.scheme];
     
-    dispatch_semaphore_signal(self.lock);
+    dispatch_semaphore_signal(_lock);
 }
 
 #pragma mark - Utils
