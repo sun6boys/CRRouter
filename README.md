@@ -2,8 +2,8 @@ CRRouter
 ====
 
 ![License MIT](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)
-[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![](https://img.shields.io/badge/language-objective-orange.svg)
+![](https://img.shields.io/cocoapods/v/CRRouter.svg?style=flat)
 
 
 ## CRRouter是什么
@@ -11,10 +11,15 @@ CRRouter
 ## CRRouter提供了哪些功能
 
  - 通过一个URL获取一个对象
- - 通过一个URL跳转相应页面
+ - 通过一个URL打开相应页面
  
 
 ## 安装
+### CocoaPods
+
+1. 在Podfile中添加 pod "CRRouter".
+2. 输入命令 `pod install` 或者 `pod update`.
+3. Import \<CRRouter/CRRouter.h\>.
 
 ## 如何使用
 

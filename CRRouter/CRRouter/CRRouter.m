@@ -21,6 +21,7 @@ static BOOL enableLog = NO;
 @interface CRRouter()
 
 @property (nonatomic, strong) NSMutableDictionary *routesStorage;
+@property (nonatomic, strong) dispatch_semaphore_t lock;
 @end
 
 @implementation CRRouter
@@ -33,6 +34,15 @@ static BOOL enableLog = NO;
         instance = [[self alloc] init];
     });
     return instance;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if(self == nil) { return nil; }
+    _lock = dispatch_semaphore_create(1);
+    _routesStorage = [[NSMutableDictionary alloc] init];
+    return self;
 }
 
 #pragma mark - public methods
@@ -167,29 +177,38 @@ static BOOL enableLog = NO;
 
 - (void)addRouteNode:(CRRouteNode *)routeNode
 {
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
     if(self.routesStorage[routeNode.scheme] == nil){
         self.routesStorage[routeNode.scheme] = [[NSMutableDictionary alloc] init];
     }
     if (self.routesStorage[routeNode.scheme][routeNode.host] == nil) {
         self.routesStorage[routeNode.scheme][routeNode.host] = [[NSMutableDictionary alloc] init];
     }
-    
     self.routesStorage[routeNode.scheme][routeNode.host][routeNode.path] = routeNode;
+    dispatch_semaphore_signal(self.lock);
 }
 
 - (CRRouteNode *)routeNodeForURL:(NSURL *)URL
 {
-    return self.routesStorage[URL.scheme][URL.host][URL.path];
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    CRRouteNode * routeNode = self.routesStorage[URL.scheme][URL.host][URL.path];
+    dispatch_semaphore_signal(self.lock);
+    
+    return routeNode;
 }
 
 - (void)removeRouteNode:(CRRouteNode *)routeNode
 {
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    
     NSMutableDictionary *schemeRoutes = self.routesStorage[routeNode.scheme];
     NSMutableDictionary *hostRoutes = schemeRoutes[routeNode.host];
 
     [hostRoutes removeObjectForKey:routeNode.path];
     if(hostRoutes.count == 0)  [schemeRoutes removeObjectForKey:routeNode.host];
     if(schemeRoutes.count == 0)  [self.routesStorage removeObjectForKey:routeNode.scheme];
+    
+    dispatch_semaphore_signal(self.lock);
 }
 
 #pragma mark - Utils
@@ -232,14 +251,6 @@ static BOOL enableLog = NO;
     }
 }
 
-#pragma mark - getters
-- (NSMutableDictionary *)routesStorage
-{
-    if (_routesStorage == nil) {
-        _routesStorage = [[NSMutableDictionary alloc] init];
-    }
-    return _routesStorage;
-}
 @end
 
 
