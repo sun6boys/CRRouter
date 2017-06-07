@@ -66,7 +66,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 ```
 如果参数验证失败，将不会继续执行下去。**如果实现了参数映射的block，那验证的是映射后的参数**
 
-### 通过URL获取一个对象
+### 实现注册的URL相应的获取实例操作
 ```
 CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
 
@@ -78,7 +78,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 ```
 如果实现了参数验证，如果这个block被调用，那肯定是参数验证通过了。
 
-### 通过URL打开一个页面
+### 实现注册的URL打开页面的操作
 ```
 CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
 
@@ -90,6 +90,34 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
    }];
 ```
 如果实现了参数验证，如果这个block被调用，那肯定是参数验证通过了。
+
+### 如何调用
+**通过URL获取一个实例**
+
+```
+UIViewController *vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?p1=1"];
+```
+如果一些参数不方便通过URL query传递（比如block）可以用下面的方式获取实例
+
+```
+dispatch_block_t completionHandler = ^{
+        
+};
+UIViewController *vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?goodsId=1" withParams:@{@"block" : completionHandler}];
+```
+**通过URL打开一个页面**
+
+```
+[CRRouter openURL:@"cr://goods/goodsDetail?p1=1"];
+```
+或
+
+```
+dispatch_block_t completionHandler = ^{
+        
+};
+[CRRouter openURL:@"cr://goods/goodsDetail?goodsId=1" withParams:@{@"block" : completionHandler}];
+```
 
 ### 支持链式语法
 如果你不喜欢上面的调用方式，**CRRouter**也提供类似[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)那样的调用方式
