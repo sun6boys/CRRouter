@@ -51,8 +51,6 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
     [temp addEntriesFromDictionary:originParams];
     return temp;
  }];
-
-
 ```
 
 So,对于我们内部仍然可以通过`cr://goods/goodsDetail?goodsId=12389`来调用，而第三方通过`cr://goods/goodsDetail?p1=12389`也可以调用到相应的模块
