@@ -37,7 +37,10 @@
     CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
     [routeNode paramsMap:^NSDictionary *(NSDictionary *originParams) {
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
-        temp[@"goodsId"] = originParams[@"p1"];
+        if(originParams[@"p1"]){
+            //说明是第三方调用
+            temp[@"goodsId"] = originParams[@"p1"];
+        }
         [temp addEntriesFromDictionary:originParams];
         return temp;
     }];
@@ -67,7 +70,10 @@
     [[[[[CRRouter registURLPattern:@"cr://goods/goodsDetail"] paramsMap:^NSDictionary *(NSDictionary *originParams) {
         
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
-        temp[@"goodsId"] = originParams[@"p1"];
+        if(originParams[@"p1"]){
+            //说明是第三方调用
+            temp[@"goodsId"] = originParams[@"p1"];
+        }
         [temp addEntriesFromDictionary:originParams];
         return temp;
         

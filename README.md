@@ -43,15 +43,19 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
 
 [routeNode paramsMap:^NSDictionary *(NSDictionary *originParams) {
-     NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
-     temp[@"goodsId"] = originParams[@"p1"];
-     [temp addEntriesFromDictionary:originParams];
-     return temp;
+    NSMutableDictionary *temp = [[NSMutableDictionary alloc] init];
+    if(originParams[@"p1"]){
+        //说明是第三方调用
+        temp[@"goodsId"] = originParams[@"p1"];
+     }
+    [temp addEntriesFromDictionary:originParams];
+    return temp;
  }];
+
 
 ```
 
-So,对于我们内部仍然可以通过`cr://goods/goodsDetail?goodsId=12389`来调用，而第三方只能通过`cr://goods/goodsDetail?p1=12389`调用
+So,对于我们内部仍然可以通过`cr://goods/goodsDetail?goodsId=12389`来调用，而第三方通过`cr://goods/goodsDetail?p1=12389`也可以调用到相应的模块
 
 ### 参数验证
 以上面为例，打开一个商品详情页，一个goodsId是必须的，**CRRouter**提供相应的参数验证
