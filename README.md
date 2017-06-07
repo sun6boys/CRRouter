@@ -23,7 +23,7 @@ CRRouter是一个利用URL注册，通过URL获取对象或者打开一个页面
 3. Import \<CRRouter/CRRouter.h\>.
 
 ## 如何使用
-###注册
+### 注册
 **CRRouter**提供了2种注册方式
 
 ```
@@ -36,7 +36,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 //第二种注册方式
 [CRRouter registURLPattern:@"cr://goods/goodsDetail"]
 ```
-###参数映射
+### 参数映射
 有时候我们需要从第三方app中打开我们app，并且进入某个页面。我们需要给他们提供scheme、host、path以及所需的参数，比如`cr://goods/goodsDetail?goodsId=12389`，但是我们不想告诉第三方页面所需要的真正参数名，所以我们告诉他们通过`cr://goods/goodsDetail?p1=12389`来打开商品详情页面，而我们真正需要的参数名是`goodsId`,**CRRouter**提供了下面的方式来映射参数。
 
 ```
@@ -53,7 +53,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 
 So,对于我们内部仍然可以通过`cr://goods/goodsDetail?goodsId=12389`来调用，而第三方只能通过`cr://goods/goodsDetail?p1=12389`调用
 
-###参数验证
+### 参数验证
 以上面为例，打开一个商品详情页，一个goodsId是必须的，**CRRouter**提供相应的参数验证
 
 ```
@@ -66,7 +66,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 ```
 如果参数验证失败，将不会继续执行下去。**如果实现了参数映射的block，那验证的是映射后的参数**
 
-###通过URL获取一个对象
+### 通过URL获取一个对象
 ```
 CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
 
@@ -78,7 +78,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 ```
 如果实现了参数验证，如果这个block被调用，那肯定是参数验证通过了。
 
-###通过URL打开一个页面
+### 通过URL打开一个页面
 ```
 CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goods" URLPath:@"/goodsDetail"];
 
@@ -91,7 +91,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
 ```
 如果实现了参数验证，如果这个block被调用，那肯定是参数验证通过了。
 
-###支持链式语法
+### 支持链式语法
 如果你不喜欢上面的调用方式，**CRRouter**也提供类似[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)那样的调用方式
 
 ```
