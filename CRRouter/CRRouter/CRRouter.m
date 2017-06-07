@@ -8,6 +8,9 @@
 
 #import "CRRouter.h"
 
+#define CRLock() dispatch_semaphore_wait(self->_lock, DISPATCH_TIME_FOREVER)
+#define CRUnlock() dispatch_semaphore_signal(self->_lock)
+
 @interface CRRouteNode()
 
 - (BOOL)validateWithOriginParams:(NSDictionary *)params routeParams:(NSDictionary *)routeParams;
@@ -178,7 +181,7 @@ static BOOL enableLog = NO;
 
 - (void)addRouteNode:(CRRouteNode *)routeNode
 {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    CRLock();
     if(self.routesStorage[routeNode.scheme] == nil){
         self.routesStorage[routeNode.scheme] = [[NSMutableDictionary alloc] init];
     }
@@ -186,21 +189,21 @@ static BOOL enableLog = NO;
         self.routesStorage[routeNode.scheme][routeNode.host] = [[NSMutableDictionary alloc] init];
     }
     self.routesStorage[routeNode.scheme][routeNode.host][routeNode.path] = routeNode;
-    dispatch_semaphore_signal(_lock);
+    CRUnlock();
 }
 
 - (CRRouteNode *)routeNodeForURL:(NSURL *)URL
 {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    CRLock();
     CRRouteNode * routeNode = self.routesStorage[URL.scheme][URL.host][URL.path];
-    dispatch_semaphore_signal(_lock);
+    CRUnlock();
     
     return routeNode;
 }
 
 - (void)removeRouteNode:(CRRouteNode *)routeNode
 {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    CRLock();
     
     NSMutableDictionary *schemeRoutes = self.routesStorage[routeNode.scheme];
     NSMutableDictionary *hostRoutes = schemeRoutes[routeNode.host];
@@ -209,7 +212,7 @@ static BOOL enableLog = NO;
     if(hostRoutes.count == 0)  [schemeRoutes removeObjectForKey:routeNode.host];
     if(schemeRoutes.count == 0)  [self.routesStorage removeObjectForKey:routeNode.scheme];
     
-    dispatch_semaphore_signal(_lock);
+    CRUnlock();
 }
 
 #pragma mark - Utils
@@ -330,7 +333,13 @@ static BOOL enableLog = NO;
     if(self.openHandler == nil)
         return NO;
     
-    self.openHandler(routeParams);
+    if([NSThread isMainThread]){
+        self.openHandler(routeParams);
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.openHandler(routeParams);
+        });
+    }
     return YES;
 }
 

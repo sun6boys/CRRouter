@@ -87,7 +87,7 @@ CRRouteNode *routeNode = [CRRouteNode routeNodeWithURLScheme:@"cr" URLHost:@"goo
      goodsVC.goodsId = routeParams[@"goodsId"];
      UINavigationController *navigationVC = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
      [navigationVC pushViewController:goodsVC animated:YES];
-   }];
+ }];
 ```
 如果实现了参数验证，如果这个block被调用，那肯定是参数验证通过了。
 

@@ -132,11 +132,6 @@
     
     //or
 //    [CRRouter openURL:@"cr://goods/goodsDetail?p1=1"];
-    
-    dispatch_block_t completionHandler = ^{
-        
-    };
-    [CRRouter openURL:@"cr://goods/goodsDetail?goodsId=1" withParams:@{@"block" : completionHandler}];
 }
 
 - (IBAction)openRouteDemo2:(id)sender

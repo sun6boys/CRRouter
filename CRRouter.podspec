@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "CRRouter"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "an simple iOS URL Router"
 
   # This description is used to generate tags and improve search results.
