@@ -162,7 +162,8 @@ dispatch_block_t completionHandler = ^{
  5. [ ] 通过URL可以调用相应Target的Action
 
 
- 如果大家有好的建议也可以通过私信的方式告诉我
+ 如果大家有好的建议也可以通过Issues的方式或者邮件[sun6boys@126.com](sun6boys@126.com)的方式告诉我。
+ 
   
 ## 协议
 CRRouter被许可在 MIT 协议下使用。查阅 LICENSE 文件来获得更多信息。
