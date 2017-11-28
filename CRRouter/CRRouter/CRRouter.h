@@ -12,7 +12,11 @@
 
 #import <Foundation/Foundation.h>
 
+
 @class CRRouteNode;
+
+typedef void (^GlobalHandler)(CRRouteNode *routeNode,NSDictionary *routeParams);
+
 @interface CRRouter : NSObject
 
 //Regist a URLPattern or CRRouteNode.
@@ -40,6 +44,9 @@
 
 //Allow CRRouter Printf log. Default is NO.
 + (void)setEnablePrintfLog:(BOOL)enablePrintfLog;
+
+//will call after openUrl success
++ (void)setGlobalHandler:(GlobalHandler)globalHandler;
 @end
 
 

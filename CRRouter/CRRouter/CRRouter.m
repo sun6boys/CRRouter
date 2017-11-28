@@ -26,6 +26,7 @@ static BOOL enableLog = NO;
     dispatch_semaphore_t _lock;
 }
 @property (nonatomic, strong) NSMutableDictionary *routesStorage;
+@property (nonatomic, copy) GlobalHandler globalHandler;
 @end
 
 @implementation CRRouter
@@ -139,7 +140,13 @@ static BOOL enableLog = NO;
         [self routerLogWithFormat:@"!!!!!!!!!!  Params error for route scheme: %@  host : %@  path :%@  !!!!!!!!!!",node.scheme,node.host,node.path];
         return NO;
     }
-    return [node openPageWithRouteParams:routeParams];
+    
+    BOOL isOpenSuccess = [node openPageWithRouteParams:routeParams];
+    if(isOpenSuccess){
+        CRRouter *router = [self sharedInstance];
+        router.globalHandler ? router.globalHandler(node,routeParams) : nil;
+    }
+    return isOpenSuccess;
 }
 
 + (BOOL)openRouteNode:(CRRouteNode *)routeNode withParams:(NSDictionary *)params
@@ -156,6 +163,12 @@ static BOOL enableLog = NO;
 + (void)setEnablePrintfLog:(BOOL)enablePrintfLog
 {
     enableLog = enablePrintfLog;
+}
+
++ (void)setGlobalHandler:(GlobalHandler)globalHandler
+{
+    CRRouter *router = [self sharedInstance];
+    router.globalHandler = globalHandler;
 }
 
 #pragma mark - private methods

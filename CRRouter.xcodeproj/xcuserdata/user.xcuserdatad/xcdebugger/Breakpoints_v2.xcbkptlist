@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "250"
             endingLineNumber = "250"
-            landmarkName = "+routerLogWithFormat:"
+            landmarkName = "+queryDictonaryWithURL:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
