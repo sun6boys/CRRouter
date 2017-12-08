@@ -26,7 +26,7 @@
     //regist
     [self registGoodsDetailRoute];
     [self registGoodsListPageRoute];
-        
+    
 }
 
 - (void)registGoodsDetailRoute
@@ -146,6 +146,15 @@
     if(vc){
         [self.navigationController pushViewController:vc animated:YES];
     }
+}
+
+- (IBAction)openRouteDemo3:(id)sender
+{
+    //支持中文测试
+//    UIViewController *vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?p1=你好啊&p2=测试123"];
+//    [self.navigationController pushViewController:vc animated:YES];
+    
+    [CRRouter openURL:@"cr://goods/goodsDetail?p1=你好啊&p2=测试123"];
 }
 
 @end

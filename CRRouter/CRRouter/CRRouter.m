@@ -91,6 +91,12 @@ static BOOL enableLog = NO;
 
 + (id)objectForURL:(NSString *)URLPattern withParams:(NSDictionary *)params
 {
+    if ([URLPattern isKindOfClass:[NSString class]] == NO || URLPattern.length == 0) {
+        [self routerLogWithFormat:@"!!!!!!!!!! URLPattern formatting error!!!!!!!!!!"];
+        return nil;
+    }
+    URLPattern =  [URLPattern stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSURL *URL = [NSURL URLWithString:URLPattern];
     NSDictionary *originParams = [self paramsForURL:URL withCustomParams:params];
     
@@ -125,6 +131,12 @@ static BOOL enableLog = NO;
 
 + (BOOL)openURL:(NSString *)URLPattern withParams:(NSDictionary *)params
 {
+    if ([URLPattern isKindOfClass:[NSString class]] == NO || URLPattern.length == 0) {
+        [self routerLogWithFormat:@"!!!!!!!!!! URLPattern formatting error!!!!!!!!!!"];
+        return nil;
+    }
+    URLPattern =  [URLPattern stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSURL *URL = [NSURL URLWithString:URLPattern];
     CRRouteNode *node = [[self sharedInstance] routeNodeForURL:URL];
     if(node == nil){
