@@ -133,7 +133,7 @@ static BOOL enableLog = NO;
 {
     if ([URLPattern isKindOfClass:[NSString class]] == NO || URLPattern.length == 0) {
         [self routerLogWithFormat:@"!!!!!!!!!! URLPattern formatting error!!!!!!!!!!"];
-        return nil;
+        return NO;
     }
     URLPattern =  [URLPattern stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     

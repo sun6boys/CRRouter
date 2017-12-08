@@ -154,7 +154,7 @@
 //    UIViewController *vc = [CRRouter objectForURL:@"cr://goods/goodsDetail?p1=你好啊&p2=测试123"];
 //    [self.navigationController pushViewController:vc animated:YES];
     
-    [CRRouter openURL:@"cr://goods/goodsDetail?p1=你好啊&p2=测试123"];
+    [CRRouter openURL:@"cr://goods/goodsDetail?p1=你好啊&p2=测试123&p3=nihao"];
 }
 
 @end
